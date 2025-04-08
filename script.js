@@ -1,8 +1,8 @@
-let dragged = null;
-
 document.querySelectorAll('.image').forEach(image => {
   image.addEventListener('dragstart', (e) => {
-    dragged = e.target;
+    const bg = window.getComputedStyle(e.target).backgroundImage;
+    e.dataTransfer.setData('text/plain', bg);
+    e.dataTransfer.setData('source-id', e.target.id);
     e.target.classList.add('selected');
   });
 
@@ -11,18 +11,19 @@ document.querySelectorAll('.image').forEach(image => {
   });
 
   image.addEventListener('dragover', (e) => {
-    e.preventDefault(); // Allow drop
+    e.preventDefault();
   });
 
   image.addEventListener('drop', (e) => {
     e.preventDefault();
 
-    if (dragged && dragged !== e.target) {
-      const draggedBg = window.getComputedStyle(dragged).backgroundImage;
-      const targetBg = window.getComputedStyle(e.target).backgroundImage;
+    const sourceId = e.dataTransfer.getData('source-id');
+    const sourceElem = document.getElementById(sourceId);
+    const sourceBg = e.dataTransfer.getData('text/plain');
+    const targetBg = window.getComputedStyle(e.target).backgroundImage;
 
-      dragged.style.backgroundImage = targetBg;
-      e.target.style.backgroundImage = draggedBg;
-    }
+    // Swap backgrounds
+    sourceElem.style.backgroundImage = targetBg;
+    e.target.style.backgroundImage = sourceBg;
   });
 });
