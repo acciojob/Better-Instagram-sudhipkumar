@@ -1,29 +1,26 @@
-document.querySelectorAll('.image').forEach(image => {
-  image.addEventListener('dragstart', (e) => {
-    const bg = window.getComputedStyle(e.target).backgroundImage;
-    e.dataTransfer.setData('text/plain', bg);
-    e.dataTransfer.setData('source-id', e.target.id);
-    e.target.classList.add('selected');
+document.querySelectorAll('.image').forEach(img => {
+  img.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('sourceId', e.target.id);
+    img.classList.add('selected');
   });
 
-  image.addEventListener('dragend', (e) => {
-    e.target.classList.remove('selected');
+  img.addEventListener('dragend', () => {
+    img.classList.remove('selected');
   });
 
-  image.addEventListener('dragover', (e) => {
+  img.addEventListener('dragover', (e) => {
+    e.preventDefault(); // necessary for drop to trigger
+  });
+
+  img.addEventListener('drop', (e) => {
     e.preventDefault();
-  });
+    const sourceId = e.dataTransfer.getData('sourceId');
+    const sourceEl = document.getElementById(sourceId);
+    const targetEl = e.currentTarget;
 
-  image.addEventListener('drop', (e) => {
-    e.preventDefault();
-
-    const sourceId = e.dataTransfer.getData('source-id');
-    const sourceElem = document.getElementById(sourceId);
-    const sourceBg = e.dataTransfer.getData('text/plain');
-    const targetBg = window.getComputedStyle(e.target).backgroundImage;
-
-    // Swap backgrounds
-    sourceElem.style.backgroundImage = targetBg;
-    e.target.style.backgroundImage = sourceBg;
+    // Swap background images
+    const temp = sourceEl.style.backgroundImage;
+    sourceEl.style.backgroundImage = targetEl.style.backgroundImage;
+    targetEl.style.backgroundImage = temp;
   });
 });
