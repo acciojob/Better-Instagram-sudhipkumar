@@ -14,6 +14,12 @@ document.querySelectorAll('.image').forEach(image => {
     e.preventDefault();
   });
 
-  
+  image.addEventListener('drop', (e) => {
+    e.preventDefault();
+    if (dragged && dragged !== e.target) {
+      const temp = dragged.style.backgroundImage;
+      dragged.style.backgroundImage = e.target.style.backgroundImage;
+      e.target.style.backgroundImage = temp;
+    }
   });
 });
