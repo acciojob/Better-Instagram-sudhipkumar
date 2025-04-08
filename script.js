@@ -11,17 +11,18 @@ document.querySelectorAll('.image').forEach(image => {
   });
 
   image.addEventListener('dragover', (e) => {
-    e.preventDefault(); // Allows dropping
+    e.preventDefault(); // Allow drop
   });
 
   image.addEventListener('drop', (e) => {
     e.preventDefault();
 
     if (dragged && dragged !== e.target) {
-      // Swap background-image
-      const temp = dragged.style.backgroundImage;
-      dragged.style.backgroundImage = e.target.style.backgroundImage;
-      e.target.style.backgroundImage = temp;
+      const draggedBg = window.getComputedStyle(dragged).backgroundImage;
+      const targetBg = window.getComputedStyle(e.target).backgroundImage;
+
+      dragged.style.backgroundImage = targetBg;
+      e.target.style.backgroundImage = draggedBg;
     }
   });
 });
