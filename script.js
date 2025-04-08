@@ -11,12 +11,14 @@ document.querySelectorAll('.image').forEach(image => {
   });
 
   image.addEventListener('dragover', (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Allows dropping
   });
 
   image.addEventListener('drop', (e) => {
     e.preventDefault();
+
     if (dragged && dragged !== e.target) {
+      // Swap background-image
       const temp = dragged.style.backgroundImage;
       dragged.style.backgroundImage = e.target.style.backgroundImage;
       e.target.style.backgroundImage = temp;
